@@ -5,6 +5,7 @@
 #define DENSITY 1000.0f
 #define DT 1.0f/60.0f
 #define BASE_WATER_LEVEL 400.0f
+#define PIXEL_SCALE_FACTOR 0.01f
 
 typedef struct{
     Vector2 pos;

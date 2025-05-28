@@ -13,7 +13,7 @@ float GetSubmergedHeight(Box *b, float waterLevel){
 }
 
 float BuoyancyForce(Box *b, float waterlevel){
-    float vol = b->size.x * GetSubmergedHeight(b,waterlevel);
+    float vol = b->size.x * GetSubmergedHeight(b,waterlevel) * PIXEL_SCALE_FACTOR * PIXEL_SCALE_FACTOR;
     return DENSITY * vol * GRAVITY;
 }
 
@@ -36,13 +36,13 @@ void UpdateBuoyancy(Box *b, float *waterLevel, float dt){
         b->vel = 0;
     }
 
-    float fluidVol = b->size.x * GetSubmergedHeight(b,*waterLevel);
+    float fluidVol = b->size.x * GetSubmergedHeight(b,*waterLevel) * PIXEL_SCALE_FACTOR *PIXEL_SCALE_FACTOR;
     *waterLevel = BASE_WATER_LEVEL - fluidVol/GetScreenWidth();
 }
 
 void DebugText(Box *b, float waterLevel){
-    float submergedHeight = GetSubmergedHeight(b, waterLevel);
-    float submergedVolume = b->size.x * submergedHeight;
+    float submergedHeight = GetSubmergedHeight(b, waterLevel) * PIXEL_SCALE_FACTOR;
+    float submergedVolume = b->size.x * submergedHeight * PIXEL_SCALE_FACTOR;
     float buoyancy = BuoyancyForce(b, waterLevel);
     float weight = b->mass * GRAVITY;
     float netForce = buoyancy - weight;

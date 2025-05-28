@@ -6,8 +6,8 @@ int main()
 	InitWindow(800,600, "Buoyancy Simulation");
 	SetTargetFPS(60);
 
-	Box box = {350,200,100,50,0,1200,0};
-	box.mass = box.size.x * box.size.y * box.density;
+	Box box = {350,200,100,50,0,1000,0};
+	box.mass = box.size.x * box.size.y * box.density * PIXEL_SCALE_FACTOR * PIXEL_SCALE_FACTOR;
 	float waterLevel = BASE_WATER_LEVEL;
 
 	while(!WindowShouldClose())
