@@ -20,7 +20,8 @@ float BuoyancyForce(Box *b, float waterlevel){
 void UpdateBuoyancy(Box *b, float *waterLevel, float dt){
     float weight = b->mass * GRAVITY;
     float buoyancy = BuoyancyForce(b,*waterLevel);
-    float totalForce = buoyancy - weight;
+    float viscous = (b->vel) * -DAMPING_COEFF;
+    float totalForce = buoyancy - weight + viscous;
     float acc = totalForce/b->mass;
 
     b->vel += acc * dt;
@@ -37,15 +38,16 @@ void UpdateBuoyancy(Box *b, float *waterLevel, float dt){
     }
 
     float fluidVol = b->size.x * GetSubmergedHeight(b,*waterLevel) * PIXEL_SCALE_FACTOR *PIXEL_SCALE_FACTOR;
-    *waterLevel = BASE_WATER_LEVEL - fluidVol/GetScreenWidth();
+    *waterLevel = BASE_WATER_LEVEL - fluidVol/(GetScreenWidth() * WATER_Z * PIXEL_SCALE_FACTOR * PIXEL_SCALE_FACTOR);
 }
 
-void DebugText(Box *b, float waterLevel){
-    float submergedHeight = GetSubmergedHeight(b, waterLevel) * PIXEL_SCALE_FACTOR;
+void DebugText(Box *b, float *waterLevel){
+    float submergedHeight = GetSubmergedHeight(b, *waterLevel) * PIXEL_SCALE_FACTOR;
     float submergedVolume = b->size.x * submergedHeight * PIXEL_SCALE_FACTOR;
-    float buoyancy = BuoyancyForce(b, waterLevel);
+    float buoyancy = BuoyancyForce(b, *waterLevel);
     float weight = b->mass * GRAVITY;
-    float netForce = buoyancy - weight;
+    float viscous = (b->vel) * -DAMPING_COEFF;
+    float netForce = buoyancy - weight + viscous;
 
     int y = 10;
     int spacing = 20;
@@ -57,7 +59,7 @@ void DebugText(Box *b, float waterLevel){
     DrawText(TextFormat("Box Mass: %.2f kg", b->mass), 10, y, 20, DARKGRAY);
     y += spacing;
 
-    DrawText(TextFormat("Water Level in Y: %.2f", waterLevel), 10, y, 20, BLUE);
+    DrawText(TextFormat("Water Level in Y: %.2f", *waterLevel), 10, y, 20, BLUE);
     y += spacing;
     DrawText(TextFormat("Submerged Height: %.2f", submergedHeight), 10, y, 20, BLUE);
     y += spacing;
@@ -67,6 +69,8 @@ void DebugText(Box *b, float waterLevel){
     DrawText(TextFormat("Buoyant Force: %.2f N", buoyancy), 10, y, 20, DARKGREEN);
     y += spacing;
     DrawText(TextFormat("Weight: %.2f N", weight), 10, y, 20, MAROON);
+    y += spacing;
+    DrawText(TextFormat("Viscous Force: %.2f N", viscous ), 10, y, 20, BLACK);
     y += spacing;
     DrawText(TextFormat("Net Force: %.2f N", netForce), 10, y, 20, BLACK);
     y += spacing;

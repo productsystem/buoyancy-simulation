@@ -6,6 +6,8 @@
 #define DT 1.0f/60.0f
 #define BASE_WATER_LEVEL 400.0f
 #define PIXEL_SCALE_FACTOR 0.01f
+#define DAMPING_COEFF 50
+#define WATER_Z 0.5f
 
 typedef struct{
     Vector2 pos;
@@ -18,4 +20,4 @@ typedef struct{
 float GetSubmergedHeight(Box *b, float waterLevel);
 float BuoyancyForce(Box *b, float waterlevel);
 void UpdateBuoyancy(Box *b, float *waterLevel, float dt);
-void DebugText(Box *b, float waterLevel);
+void DebugText(Box *b, float *waterLevel);

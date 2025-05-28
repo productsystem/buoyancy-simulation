@@ -3,10 +3,10 @@
 
 int main()
 {
-	InitWindow(800,600, "Buoyancy Simulation");
-	SetTargetFPS(60);
+	InitWindow(800,800, "Buoyancy Simulation");
+	SetTargetFPS(240);
 
-	Box box = {350,200,100,50,0,1000,0};
+	Box box = {350,200,100,50,0,500,0};
 	box.mass = box.size.x * box.size.y * box.density * PIXEL_SCALE_FACTOR * PIXEL_SCALE_FACTOR;
 	float waterLevel = BASE_WATER_LEVEL;
 
@@ -16,7 +16,7 @@ int main()
 		BeginDrawing();
 			ClearBackground(RAYWHITE);
 			DrawFPS(0,0);
-			DebugText(&box, waterLevel);
+			DebugText(&box, &waterLevel);
 			DrawLine(0, (int)waterLevel, 800, (int)waterLevel, BLUE);
 			DrawRectangleV(box.pos,box.size,BLACK);
 		EndDrawing();
