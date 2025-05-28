@@ -17,10 +17,20 @@ float BuoyancyForce(Box *b, float waterlevel){
     return DENSITY * vol * GRAVITY;
 }
 
+bool IsSubmerged(Box *b, float waterLevel) {
+    return b->pos.y + b->size.y > waterLevel;
+}
+
 void UpdateBuoyancy(Box *b, float *waterLevel, float dt){
     float weight = b->mass * GRAVITY;
     float buoyancy = BuoyancyForce(b,*waterLevel);
-    float viscous = (b->vel) * -DAMPING_COEFF;
+    float viscous = 0.0f;
+    if (IsSubmerged(b, *waterLevel)) {
+        viscous = (b->vel) * -DAMPING_COEFF;
+    } 
+    else {
+        viscous = 0;
+    }
     float totalForce = buoyancy - weight + viscous;
     float acc = totalForce/b->mass;
 
